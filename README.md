@@ -14,10 +14,11 @@ This repository is configured for demonstrating Macroscope's AI code review capa
 
 ### Intentional Bugs
 
-1. **Bug 1 - Correctness Bug** (Macroscope should catch this)
+1. **Bug 1 - Logic Bug** (Macroscope should catch this)
    - Location: `app/page.tsx` line ~468
-   - Issue: Call to non-existent function `calculateTeamUtilization()`
-   - This will cause a runtime error
+   - Issue: `reduce()` accumulator initialized to `1` instead of `0`
+   - The comment says "Initialize accumulator" making it look intentional
+   - This causes incorrect average calculation (off by ~0.125%)
 
 2. **Bug 2 - Visual/Styling Bug** (Macroscope won't catch this)
    - Location: `app/page.tsx` line ~695
