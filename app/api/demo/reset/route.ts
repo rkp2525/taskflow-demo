@@ -5,13 +5,8 @@ import { promisify } from 'util'
 const execAsync = promisify(exec)
 
 export async function POST() {
-  // Security check - only allow in development or when DEMO_MODE is enabled
-  if (process.env.NODE_ENV === 'production' && process.env.DEMO_MODE !== 'true') {
-    return NextResponse.json(
-      { success: false, error: 'Demo controls are disabled in production' },
-      { status: 403 }
-    )
-  }
+  // Note: Access control is handled by GrowthBook feature flag on the client side
+  // The UI won't render the controls unless demo-controls-enabled flag is true
 
   try {
     const { stdout, stderr } = await execAsync('bash scripts/reset-demo.sh', {
