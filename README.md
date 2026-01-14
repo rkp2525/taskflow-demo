@@ -8,6 +8,65 @@ This is a **static demo/mockup** showcasing the FlowMetrics dashboard UI. It's d
 
 **Note:** This is purely a visual mockup. No functionality is implemented - navigation, buttons, and interactions are visual only.
 
+## Macroscope Demo Instructions
+
+This repository is configured for demonstrating Macroscope's AI code review capabilities. The `demo-bugs` branch contains intentional bugs for the demo.
+
+### Intentional Bugs
+
+1. **Bug 1 - Logic Bug** (Macroscope should catch this)
+   - Location: `app/page.tsx` line ~468
+   - Issue: `reduce()` accumulator initialized to `1` instead of `0`
+   - The comment says "Initialize accumulator" making it look intentional
+   - This causes incorrect average calculation (off by ~0.125%)
+
+2. **Bug 2 - Visual/Styling Bug** (Macroscope won't catch this)
+   - Location: `app/page.tsx` line ~695
+   - Issue: Metric cards stack vertically instead of in a grid
+   - Changed from `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6` to `flex flex-col`
+
+### Initial Setup (One-time)
+
+```bash
+# 1. Commit the buggy state on main first, then create branches
+git checkout main
+git add .
+git commit -m "feat: Add team utilization metrics and UI improvements"
+
+# 2. Create the demo-bugs branch
+git checkout -b demo-bugs
+
+# 3. Create a snapshot branch to reset to
+git branch demo-bugs-original
+
+# 4. Push all branches
+git push -u origin main
+git push -u origin demo-bugs
+git push -u origin demo-bugs-original
+```
+
+### Resetting Between Demos
+
+Run the reset script to restore the demo to its initial buggy state:
+
+```bash
+npm run reset-demo
+```
+
+This will:
+1. Reset `demo-bugs` branch to match `demo-bugs-original`
+2. Force push to remote
+3. Close any existing PR on the branch
+4. Create a fresh PR and open it in your browser
+
+### Demo Flow
+
+1. Run `npm run reset-demo` to set up a fresh PR
+2. Show the PR in Macroscope
+3. Macroscope should catch Bug 1 (the undefined function call)
+4. Macroscope will likely miss Bug 2 (the visual styling issue)
+5. Show the running app to demonstrate Bug 2 visually
+
 ## Tech Stack
 
 - **Next.js 14** (App Router)

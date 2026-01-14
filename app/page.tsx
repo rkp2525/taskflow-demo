@@ -464,6 +464,10 @@ export default function Dashboard() {
     day: 'numeric',
   })
 
+  // TODO: Verify utilization calculation
+  const totalUtilization = teamCapacityData.reduce((sum, member) => sum + member.allocation, 1) // Initialize accumulator
+  const avgUtilization = totalUtilization / teamCapacityData.length
+
   const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8']
 
   return (
