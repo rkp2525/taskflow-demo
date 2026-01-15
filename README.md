@@ -1,145 +1,163 @@
-# TaskFlow
+# TaskFlow Demo App
 
-A clean, modern task management app for teams to track their work.
+A simple task management app used for demonstrating Macroscope's AI code review capabilities.
 
-## Features
+> **Note:** This is a demo app, not for production use. It's designed to showcase how Macroscope catches bugs in pull requests.
 
-- **Add tasks** - Create new tasks with a simple form
-- **Mark complete** - Toggle task completion with a checkbox
-- **Delete tasks** - Remove tasks you no longer need
-- **Filter tasks** - View All, Active, or Completed tasks
-- **Persistent storage** - Tasks saved to localStorage
-- **Task count** - See how many active tasks remain
+---
 
-## Tech Stack
+## For Sales Reps: Quick Setup Guide
 
-- **Next.js 14** (App Router)
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
-- **localStorage** for data persistence
+Follow these steps to get your own demo environment running. No coding required!
 
-## Getting Started
+### Step 1: Get the Code on GitHub
 
-### Prerequisites
+1. Go to the [TaskFlow repository](https://github.com/govambam/flowmetrics-demo)
+2. Click the **Fork** button in the top right
+3. This creates a copy in your GitHub account
 
-- Node.js 18+ installed
-- npm or yarn package manager
+### Step 2: Deploy to Vercel
 
-### Installation
+1. Go to [vercel.com](https://vercel.com) and sign up (free) using your GitHub account
+2. Click **"Add New Project"**
+3. Find and select your forked `flowmetrics-demo` repository
+4. Click **Deploy** (leave all settings as default)
+5. Wait for the build to complete (about 1 minute)
+6. Your app is now live! Vercel will give you a URL like `flowmetrics-demo-abc123.vercel.app`
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd taskflow
+### Step 3: Add Environment Variables
 
-# Install dependencies
-npm install
+The demo controls need API access to create pull requests and clean up. Here's how to set that up:
 
-# Run the development server
-npm run dev
-```
+1. In Vercel, go to your project → **Settings** → **Environment Variables**
+2. Add the following variables:
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+| Variable | What It Does | How to Get It |
+|----------|--------------|---------------|
+| `GITHUB_TOKEN` | Creates PRs and branches | [Create a GitHub token](https://github.com/settings/tokens) → Generate new token (classic) → Select `repo` scope |
+| `LINEAR_API_KEY` | Cleans up Linear issues | [Linear Settings](https://linear.app/settings/api) → Personal API keys → Create key |
 
-## Deploy to Vercel
+3. After adding both variables, go to **Deployments** and click **Redeploy** on the latest deployment
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
+### Step 4: You're Ready!
 
-# Deploy
-vercel
-```
+Visit your Vercel URL and you're all set to run demos.
 
-Or connect your GitHub repository to Vercel for automatic deployments.
+---
 
-## Project Structure
+## Running a Demo
 
-```
-taskflow/
-├── app/
-│   ├── api/demo/       # API routes for demo controls
-│   │   ├── create/route.ts
-│   │   └── reset/route.ts
-│   ├── globals.css     # Global styles and Tailwind
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Main TaskFlow component
-├── components/
-│   └── DemoControls.tsx      # Hidden admin menu (Cmd+Shift+D)
-├── types/
-│   └── task.ts         # TypeScript interfaces
-├── scripts/
-│   ├── create-demo.sh  # Creates demo branch with bugs
-│   └── reset-demo.sh   # Resets demo environment
-├── package.json
-├── tailwind.config.ts
-└── tsconfig.json
-```
+### Opening Demo Controls
 
-## Usage
+Press **`Cmd+Shift+D`** (Mac) or **`Ctrl+Shift+D`** (Windows) to open the hidden Demo Controls panel.
 
-1. **Add a task** - Type in the input field and press Enter or click "Add Task"
-2. **Complete a task** - Click the checkbox to mark as done
-3. **Delete a task** - Hover over a task and click the trash icon
-4. **Filter tasks** - Use the All/Active/Completed tabs
-
-## Data Persistence
-
-Tasks are stored in your browser's localStorage. They persist across page refreshes and browser sessions. To clear all data, open browser DevTools and clear localStorage.
-
-## Demo Workflow (Macroscope)
-
-This repository includes automated scripts for demonstrating Macroscope's AI code review capabilities.
-
-### Quick Start
-
-**Option 1: From the UI (recommended for live demos)**
-
-Press `Cmd+Shift+D` (Mac) or `Ctrl+Shift+D` (Windows/Linux) to open the Demo Controls panel. Click the buttons to create or reset the demo.
-
-**Option 2: From the terminal**
-
-```bash
-# 1. Create demo branch with bugs + PR (opens in browser)
-npm run create-demo
-
-# 2. When done, reset for the next demo
-npm run reset-demo
-```
-
-### What the Demo Does
-
-**`npm run create-demo`** creates a `demo-bugs` branch with 2 intentional bugs, pushes to GitHub, and opens a PR in your browser:
-
-| Bug | Location | Issue | Should Be |
-|-----|----------|-------|-----------|
-| 1 | `deleteTask()` | `task.id === id` (inverted) | `task.id !== id` |
-| 2 | `toggleTask()` | Direct state mutation | Immutable update with spread |
-
-These are realistic bugs that Macroscope's code review should catch:
-- **Bug 1:** Inverted filter logic (deletes everything EXCEPT the clicked task)
-- **Bug 2:** React state mutation anti-pattern (checkbox won't visually update)
-
-**`npm run reset-demo`** cleans up everything:
-- Deletes local `demo-bugs` branch
-- Deletes remote `demo-bugs` branch
-- Closes any open PRs on that branch
-
-### Prerequisites
-
-- GitHub CLI (`gh`) installed and authenticated
-- Git repository with remote `origin` configured
-- Must be on `main` branch with no uncommitted changes
+You'll see two buttons:
+- **Create Demo PR** - Creates a pull request with intentional bugs
+- **Reset Demo** - Cleans everything up for the next demo
 
 ### Demo Flow
 
-1. **Setup:** Run `npm run create-demo` (creates branch, pushes, opens PR in browser)
-2. **Demo:** Show Macroscope reviewing the PR
-3. **Discuss:** Walk through the bugs it found
-4. **Reset:** Run `npm run reset-demo`
-5. **Repeat:** Ready for next demo
+1. **Before the demo:** Press `Cmd+Shift+D` and click **"Reset Demo"** to ensure a clean slate
+2. **During the demo:** Click **"Create Demo PR"** - this creates a PR with bugs
+3. **Show Macroscope:** The PR will appear in GitHub. Show how Macroscope reviews it and catches the bugs
+4. **After the demo:** Click **"Reset Demo"** to clean up
 
-## License
+### What Bugs Does It Create?
 
-MIT
+The demo PR introduces two realistic bugs that Macroscope should catch:
+
+| Bug | What Happens | What It Should Do |
+|-----|--------------|-------------------|
+| **Delete Bug** | Clicking delete removes everything EXCEPT the clicked task | Should only delete the clicked task |
+| **Checkbox Bug** | Clicking a checkbox doesn't visually update | Should toggle the checkbox on/off |
+
+These are real coding mistakes that developers make, and they demonstrate Macroscope's ability to catch subtle bugs.
+
+---
+
+## Shared Resources
+
+**Linear Project:** All sales reps share the same "Web-Demo" project in Linear. When you click "Reset Demo", it cleans up issues created by any demo in this shared project.
+
+**GitHub Repository:** Each rep should fork their own copy to avoid conflicts.
+
+---
+
+## Troubleshooting
+
+### "Create Demo PR" fails
+
+- **Check your GitHub token:** Make sure you created a token with `repo` scope and added it to Vercel
+- **Redeploy after adding variables:** Environment variables require a redeployment to take effect
+
+### "Reset Demo" fails
+
+- **Check both tokens:** The reset needs both `GITHUB_TOKEN` and `LINEAR_API_KEY`
+- **Linear API key:** Make sure you created a Personal API key in Linear settings
+
+### Demo controls don't appear
+
+- **Use the keyboard shortcut:** Press `Cmd+Shift+D` (Mac) or `Ctrl+Shift+D` (Windows)
+- **Try refreshing:** If it still doesn't work, try a hard refresh (`Cmd+Shift+R`)
+
+### Need help?
+
+Reach out in the #sales-engineering Slack channel.
+
+---
+
+## How the App Works
+
+TaskFlow is a simple to-do list app where you can:
+- Add tasks by typing and pressing Enter
+- Mark tasks complete by clicking the checkbox
+- Delete tasks by hovering and clicking the trash icon
+- Filter between All, Active, and Completed tasks
+
+The app stores tasks in your browser, so they persist between page refreshes.
+
+---
+
+## For Developers
+
+<details>
+<summary>Click to expand technical details</summary>
+
+### Tech Stack
+- Next.js 14 (App Router)
+- React 18 with TypeScript
+- Tailwind CSS
+- Lucide React icons
+
+### Project Structure
+```
+taskflow/
+├── app/
+│   ├── api/demo/          # Demo control API routes
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Main app component
+├── components/
+│   └── DemoControls.tsx   # Hidden admin panel
+├── scripts/
+│   ├── create-demo.sh     # CLI script for creating demos
+│   └── reset-demo.sh      # CLI script for resetting demos
+└── types/
+    └── task.ts            # TypeScript interfaces
+```
+
+### Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+### Environment Variables
+
+Create a `.env.local` file:
+```
+GITHUB_TOKEN=your_token_here
+LINEAR_API_KEY=your_key_here
+```
+
+</details>
