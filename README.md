@@ -120,12 +120,12 @@ npm run reset-demo
 
 | Bug | Location | Issue | Should Be |
 |-----|----------|-------|-----------|
-| 1 | `deleteTask()` | `task.id != id` (loose equality) | `task.id !== id` (strict equality) |
+| 1 | `deleteTask()` | `task.id === id` (inverted) | `task.id !== id` |
 | 2 | `activeCount` | `task.completed` (inverted) | `!task.completed` |
 
 These are realistic bugs that Macroscope's code review should catch:
-- Loose vs strict equality (code quality issue)
-- Inverted boolean logic (counts wrong items)
+- Inverted filter logic (deletes everything EXCEPT the clicked task)
+- Inverted boolean logic (counts completed instead of active tasks)
 
 **`npm run reset-demo`** cleans up everything:
 - Deletes local `demo-bugs` branch
